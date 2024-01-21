@@ -6,8 +6,9 @@ import json
 import g4f
 import os
 
-if os.path.isfile('cookie.json') is False:
-    with open('cookies.json', 'w+') as file:
+if os.path.isfile('data.json') is False:
+    with open('data.json', 'w+') as file:
+        print("set data")
         data = {
             "cookies": {
                 "CID": "",
@@ -15,12 +16,13 @@ if os.path.isfile('cookie.json') is False:
             },
             "headers": {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"
-            }
+            },
+            "url": ""
         }
         json.dump(data, file, indent=2)
         file.close()
 
-with open('cookies.json', 'r+') as c:
+with open('data.json', 'r+') as c:
     t = json.load(c)
     cookies = t['cookies']
     headers = t['headers']
