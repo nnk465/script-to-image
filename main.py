@@ -45,33 +45,37 @@ def start():
     if len(var_True) > 1:
         return
     else:
-        number = textscript.get("1.0", "end-1c")
-        modules.main(number=int(number_entry.get()), text=number, style=var_True[0] if len(var_True) == 1 else 'FILM',
+        text = textscript.get("1.0", "end-1c")
+        number = number_entry.get()
+        if number.isdigit() is False or number == 0:
+            number = 1
+        modules.main(number=number, text=text, style=var_True[0] if len(var_True) == 1 else 'FILM',
                      root=root)
 
 
 def set_data(t):
-    if t == 'cookies':
-        text = cookies_set.get("1.0", "end-1c")
-        cookie = re.findall(r'cf_bm=(.*?);', text)
-        if len(cookie) != 1:
-            return
-        cookie.append(re.findall(r'CID=(.*?);', text)[0])
-        if len(cookie) != 2:
-            return
-    if t == 'url':
-        text = set_url.get("1.0", "end-1c")
     with open('data.json', 'r+') as file:
         data = json.loads(file.read())
         file.close()
-    with open('data.json', 'w+') as file:
-        if t == 'cookies':
-            data['cookies']['__cf_bm'] = cookie[0]
-            data['cookies']['CID'] = cookie[1]
-        if t == 'url':
-            data['url'] = text
-        json.dump(data, file, indent=2)
-        file.close()
+    if t == 'cookies':
+        text = cookies_set.get("1.0", "end-1c")
+        with open('data.json', 'w+') as file:
+            bm = re.findall(r'cf_bm=(.*?);', text)
+            cid = re.findall(r'CID=(.*?);', text)
+            brand = re.findall(r"X-Canva-Brand: (.*?)'", text)
+            data['cookies']['__cf_bm'] = bm[0] if len(bm) == 1 else print('pas set-bm')
+            data['cookies']['CID'] = cid[0] if len(cid) == 1 else print('pas set-cid')
+            data['headers']['X-Canva-brand'] = brand[0] if len(brand) == 1 else print('pas canva brand')
+            json.dump(data, file, indent=2)
+            file.close()
+
+    if t == 'url':
+        text = set_url.get("1.0", "end-1c")
+        with open('data.json', 'w+') as file:
+            if t == 'url':
+                data['url'] = text
+            json.dump(data, file, indent=2)
+            file.close()
 
     return
 
