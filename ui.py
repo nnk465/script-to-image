@@ -6,7 +6,6 @@ import requests
 from PIL import Image, ImageTk, ImageDraw
 from tkinter import ttk
 
-# Créer la fenêtre principale
 liste_liens = []
 
 image_lists = [[
